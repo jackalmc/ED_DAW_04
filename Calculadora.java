@@ -1,3 +1,8 @@
+/***
+ * @author Juan Manuel
+ * @version v0.1
+ */
+
 import java.awt.BorderLayout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -12,12 +17,18 @@ import javax.swing.JOptionPane;
 public class Calculadora {
 
     // Constantes
+    //Define el máximo de dígitos permitidos
     final int MAX_DIGITS = 5;
+    //Define cuál es el modo de entrada
     final int MODE_ENTRADA = 0;
+    //Define cuál es el modo de resultado
     final int MODE_RESULTADO = 1;
 
     //Variables
     int modo;
+    /**
+     * @deprecated No se usa
+     */
     int digito;
     int valor1;
     int valor2;
@@ -26,7 +37,12 @@ public class Calculadora {
 
     private static Text texto_resultado;
 
+    /**
+     * Este método inicializa la GUI según el parámetro que se le pase:
+     * @param gui Si esto es true se inicializa la interfaz
+     **/
     public Calculadora(boolean gui) {
+
 
         //Inicialización de las variables.
         inicializa();
@@ -35,6 +51,10 @@ public class Calculadora {
 
     }
 
+    /**
+     * Este es el método que "construye" la interfaz, configurandola en su
+     * composición final
+     */
     private void dibujaCalculadora() {
 
         Display display = Display.getDefault();
@@ -229,7 +249,11 @@ public class Calculadora {
         }
     }
 
+    /**
+     * Este método indica el estado inicial de la calculadora
+     */
     public void inicializa() {
+
         operacion = "null";
         valor1 = 0;
         valor2 = 0;
@@ -238,37 +262,50 @@ public class Calculadora {
     }
 
     public String getResultadoString (){
+        //Devuelve el resultado en String
         return texto_resultado.getText();
     }
 
     public void setResultadoString(String s){
+        //Asigna el resultado en String
         texto_resultado.setText(s);
     }
 
     public int getResultadoInt() {
+        //Accede al resultado en int
         String resultado = texto_resultado.getText();
         return Integer.parseInt(resultado);
     }
 
+    /**
+     * Este método introduce un nuevo número
+     * @param digito El dígito a introducir
+     */
     public void anadeNuevoDigito(int digito){
         if (inicializa_resultado)
             setResultadoString("");
 
         String inputString = getResultadoString();
 
+        //Si el primer número es un 0, se comienza por el siguiente
         if (inputString.indexOf("0") == 0){
             inputString = inputString.substring(1);
         }
-
+        //Si no lo es, lo añade
         if ((!inputString.equals("0") || digito > 0) && inputString.length() < MAX_DIGITS){
             setResultadoString(inputString + digito);
         }
 
+        //Mantiene método entrada
         modo = MODE_ENTRADA;
         inicializa_resultado = false;
     }
 
+    /**
+     * @param new_operacion Ejecuta la operación pasada
+     */
     public void ejecutarOperador(String new_operacion) {
+
 
         int resultado;
 
@@ -290,6 +327,9 @@ public class Calculadora {
         operacion = new_operacion;
     }
 
+    /**
+     * Esto define qué ocurre cuando se pulsa el =
+     */
     public void ejecutarIgual(){
         int resultado = 0;
 
@@ -300,12 +340,16 @@ public class Calculadora {
         operacion = "null";
     }
 
+    /**
+     * Ejecuta la operación marcada
+     * @return Devuelve el resultado de la operación
+     */
     public int ejecutarOperacion() {
         int resultado = 0;
 
         if (operacion.equals("/"))
         {
-
+        //Esto comprueba si se está intentando dividir por 0, para evitar el error.
             if (valor2 == 0)
             {
                 JOptionPane.showMessageDialog(null, "No se puede dividir por cero", "Error", JOptionPane.ERROR_MESSAGE);
@@ -330,14 +374,26 @@ public class Calculadora {
         return resultado;
     }
 
+
+    /**
+     * Muestra el resultado en pantalla
+     * Muestra el resultado y pone la aplicación en modo Resultado
+     * @param resultado El resultado que se quiere mostrar
+     */
     public void muestraResultado(int resultado){
         setResultadoString(Integer.toString(resultado));
         valor1 = resultado;
+        //Pone el programa en modo Resultado
         modo = MODE_RESULTADO;
         inicializa_resultado = true;
     }
 
+
+    /**
+     * Inicializa el objeto de tipo calculadora y lo inicia en modo Interfaz Gráfica
+     */
     public static void main(String args[]) {
+        //
         Calculadora calculadora = new Calculadora(true);
     }
 
